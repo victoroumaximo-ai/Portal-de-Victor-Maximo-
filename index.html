@@ -3,16 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Victor Ferreira — Portefólio Escolar</title>
+  <title>Victor Ferreira — Portefólio & Trabalhos</title>
   <style>
     :root {
-      --bg-color: #0b0f19;
-      --card-bg: #131c31;
-      --card-border: #1e293b;
-      --accent: #38bdf8;
-      --accent-gradient: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --border-color: #e2e8f0;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --tag-bg: #eff6ff;
+      --tag-text: #1d4ed8;
     }
 
     * {
@@ -26,59 +28,181 @@
       background-color: var(--bg-color);
       color: var(--text-main);
       line-height: 1.6;
-      padding: 1.5rem 1rem;
-      min-height: 100vh;
     }
 
+    /* Navegação com Menu Hambúrguer */
+    .navbar {
+      background-color: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    }
+
+    .nav-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      z-index: 101;
+    }
+
+    .hamburger span {
+      width: 25px;
+      height: 3px;
+      background-color: var(--text-main);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    /* Animação do botão hambúrguer */
+    .hamburger.active span:nth-child(1) {
+      transform: translateY(8px) rotate(45deg);
+    }
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+    .hamburger.active span:nth-child(3) {
+      transform: translateY(-8px) rotate(-45deg);
+    }
+
+    .nav-menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 260px;
+      height: 100vh;
+      background-color: var(--card-bg);
+      border-left: 1px solid var(--border-color);
+      padding: 5rem 1.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      transition: right 0.3s ease;
+      box-shadow: -5px 0 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .nav-menu.active {
+      right: 0;
+    }
+
+    .nav-menu a {
+      color: var(--text-main);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.05rem;
+      transition: color 0.2s ease;
+    }
+
+    .nav-menu a:hover {
+      color: var(--primary);
+    }
+
+    /* Conteúdo Principal */
     .container {
       max-width: 1100px;
       margin: 0 auto;
+      padding: 1.5rem 1rem 3rem;
     }
 
-    /* Cabeçalho */
     header {
       text-align: center;
       margin-bottom: 2.5rem;
-      padding: 2rem 1rem;
-      background: linear-gradient(180deg, rgba(56, 189, 248, 0.05) 0%, transparent 100%);
-      border-bottom: 1px solid var(--card-border);
-      border-radius: 16px;
+      padding: 2.5rem 1rem 1.5rem;
     }
 
     header h1 {
       font-size: 2.2rem;
-      background: var(--accent-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: var(--text-main);
       font-weight: 800;
-      letter-spacing: -0.5px;
     }
 
     header p {
       color: var(--text-muted);
       margin-top: 0.5rem;
-      font-size: 1rem;
+      font-size: 1.05rem;
     }
 
-    /* Secções e Categorias */
+    /* Cartões de Habilidades e Gostos */
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin-bottom: 3.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .profile-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .profile-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
+    }
+
+    .profile-card h2 {
+      font-size: 1.25rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tags-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tag {
+      background-color: var(--tag-bg);
+      color: var(--tag-text);
+      padding: 0.4rem 0.85rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    /* Categorias e Publicações */
     .subject-category {
       margin-bottom: 3rem;
     }
 
     .subject-title {
-      font-size: 1.4rem;
-      color: var(--accent);
-      margin-bottom: 1.2rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      text-transform: capitalize;
-      font-weight: 700;
-      border-left: 4px solid var(--accent);
+      font-size: 1.35rem;
+      color: var(--text-main);
+      margin-bottom: 1.25rem;
+      border-left: 4px solid var(--primary);
       padding-left: 0.75rem;
+      text-transform: capitalize;
     }
 
-    /* Grelha de Publicações Otimizada para Telemóvel */
     .posts-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -87,44 +211,37 @@
 
     @media (min-width: 640px) {
       .posts-grid {
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       }
     }
 
-    /* Cartão de Publicação */
     .post-card {
       background-color: var(--card-bg);
-      border: 1px solid var(--card-border);
+      border: 1px solid var(--border-color);
       border-radius: 16px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     .post-card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(56, 189, 248, 0.4);
-      box-shadow: 0 12px 20px -3px rgba(0, 0, 0, 0.4);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
     }
 
     .post-image-wrapper {
       width: 100%;
       height: 180px;
       overflow: hidden;
-      background-color: #000;
+      background-color: #f1f5f9;
     }
 
     .post-card img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.4s ease;
-    }
-
-    .post-card:hover img {
-      transform: scale(1.05);
     }
 
     .post-content {
@@ -135,11 +252,9 @@
     }
 
     .post-content h2 {
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       margin-bottom: 0.5rem;
       color: var(--text-main);
-      font-weight: 600;
-      line-height: 1.4;
     }
 
     .post-content p {
@@ -156,57 +271,116 @@
     .post-link {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.4rem;
       align-self: flex-start;
-      background: rgba(56, 189, 248, 0.1);
-      color: var(--accent);
-      padding: 0.5rem 1rem;
+      background-color: var(--tag-bg);
+      color: var(--primary);
+      padding: 0.45rem 0.9rem;
       border-radius: 8px;
       text-decoration: none;
       font-size: 0.85rem;
       font-weight: 600;
-      transition: background 0.2s ease;
+      transition: background-color 0.2s ease;
     }
 
     .post-link:hover {
-      background: rgba(56, 189, 248, 0.2);
+      background-color: #dbeafe;
     }
 
-    /* Mensagem de Estado / Erro */
     .status-msg {
       text-align: center;
       color: var(--text-muted);
       font-size: 1rem;
-      padding: 3rem 1rem;
+      padding: 2.5rem 1rem;
     }
 
-    /* Estilo injetado quando se visualiza o trabalho (Modo Leitor Estilizado) */
     body.viewing-mode {
-      padding: 0;
       background-color: var(--bg-color);
     }
   </style>
 </head>
 <body>
 
+  <!-- Navegação -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">Victor Ferreira</a>
+      <button class="hamburger" id="hamburger-btn" aria-label="Abrir Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-menu" id="nav-menu">
+        <a href="#inicio" onclick="closeMenu()">Início</a>
+        <a href="#habilidades" onclick="closeMenu()">Habilidades</a>
+        <a href="#gostos" onclick="closeMenu()">Gostos & Interesses</a>
+        <a href="#trabalhos" onclick="closeMenu()">Trabalhos Escolares</a>
+      </div>
+    </div>
+  </nav>
+
   <div class="container" id="main-container">
-    <header>
+    <header id="inicio">
       <h1>Victor Ferreira</h1>
-      <p>Portefólio de Trabalhos Escolares</p>
+      <p>Portefólio de Trabalhos Escolares & Projetos Pessoais</p>
     </header>
 
-    <main id="app">
-      <div id="status" class="status-msg">A carregar trabalhos com estilo...</div>
-    </main>
+    <!-- Secção de Habilidades e Gostos -->
+    <section class="profile-grid">
+      <div class="profile-card" id="habilidades">
+        <h2>⚡ Habilidades</h2>
+        <div class="tags-list">
+          <span class="tag">HTML5 & CSS3</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">Desenvolvimento Web</span>
+          <span class="tag">Criação de Jogos Simples</span>
+          <span class="tag">Escrita Criativa</span>
+          <span class="tag">Basquetebol</span>
+          <span class="tag">Edição de Vídeo</span>
+        </div>
+      </div>
+
+      <div class="profile-card" id="gostos">
+        <h2>🎮 Gostos & Interesses</h2>
+        <div class="tags-list">
+          <span class="tag">Programação & Código</span>
+          <span class="tag">Jogos Online (Roblox, DLS, Free Fire)</span>
+          <span class="tag">Futebol & Basquetebol</span>
+          <span class="tag">Música (Phonk & Funk)</span>
+          <span class="tag">Criação de Conteúdo no YouTube</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Secção dos Trabalhos -->
+    <section id="trabalhos">
+      <main id="app">
+        <div id="status" class="status-msg">A carregar trabalhos...</div>
+      </main>
+    </section>
   </div>
 
   <script>
+    // Lógica do Menu Hambúrguer
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const navMenu = document.getElementById('nav-menu');
+
+    hamburgerBtn.addEventListener('click', () => {
+      hamburgerBtn.classList.toggle('active');
+      navMenu.classList.toggle('active');
+    });
+
+    function closeMenu() {
+      hamburgerBtn.classList.remove('active');
+      navMenu.classList.remove('active');
+    }
+
+    // Carregamento dos Trabalhos do GitHub
     async function initPortfolio() {
       const app = document.getElementById('app');
       const status = document.getElementById('status');
       const container = document.getElementById('main-container');
 
-      // Parâmetro para ver um trabalho específico de forma bonita (?trabalho=nome.html)
       const urlParams = new URLSearchParams(window.location.search);
       const targetWork = urlParams.get('trabalho');
 
@@ -214,24 +388,23 @@
         document.body.classList.add('viewing-mode');
         try {
           const res = await fetch(targetWork);
-          if (!res.ok) throw new Error('Não foi possível carregar o trabalho.');
+          if (!res.ok) throw new Error('Erro ao carregar ficheiro.');
           const htmlText = await res.text();
 
           const parser = new DOMParser();
           const doc = parser.parseFromString(htmlText, 'text/html');
 
-          // Recolhe os elementos do trabalho
           const title = doc.querySelector('h1')?.innerHTML || 'Trabalho Escolar';
           const img = doc.querySelector('img')?.outerHTML || '';
           const bodyContent = doc.querySelector('body').innerHTML;
 
           container.innerHTML = `
-            <div style="max-width: 750px; margin: 0 auto; padding: 2rem 1rem;">
-              <a href="index.html" class="post-link" style="margin-bottom: 2rem; display: inline-flex;">&larr; Voltar ao Início</a>
-              <article style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 1.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
+            <div style="max-width: 750px; margin: 1rem auto; padding: 1rem;">
+              <a href="index.html" class="post-link" style="margin-bottom: 1.5rem; display: inline-flex;">&larr; Voltar ao Início</a>
+              <article style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);">
                 <div style="margin-bottom: 1.5rem;">
-                  ${img ? `<div style="border-radius: 12px; overflow:hidden; margin-bottom: 1.5rem; max-height: 350px;">${img.replace(/style="[^"]*"/g, '').replace(/width="[^"]*"/g, '').replace(/height="[^"]*"/g, 'style="width:150%; height:auto; display:block;"')}</div>` : ''}
-                  <h1 style="font-size: 1.8rem; color: var(--text-main); margin-bottom: 1rem; font-weight: 700;">${title}</h1>
+                  ${img ? `<div style="border-radius: 12px; overflow:hidden; margin-bottom: 1.5rem; max-height: 350px;">${img.replace(/style="[^"]*"/g, '').replace(/width="[^"]*"/g, '').replace(/height="[^"]*"/g, 'style="width:100%; height:auto; display:block;"')}</div>` : ''}
+                  <h1 style="font-size: 1.6rem; color: var(--text-main); margin-bottom: 1rem; font-weight: 800;">${title}</h1>
                 </div>
                 <div style="color: var(--text-muted); font-size: 1rem; line-height: 1.8;" class="work-body-content">
                   ${bodyContent}
@@ -242,8 +415,7 @@
               </div>
             </div>
           `;
-          
-          // Ajusta imagens internas do corpo do documento para ficarem bonitas e responsivas
+
           container.querySelectorAll('.work-body-content img').forEach(image => {
             image.style.maxWidth = '100%';
             image.style.height = 'auto';
@@ -251,18 +423,17 @@
             image.style.margin = '1rem 0';
           });
 
-          // Oculta h1 duplicado se já estiver no conteúdo principal
           const firstH1 = container.querySelector('.work-body-content h1');
           if (firstH1) firstH1.style.display = 'none';
 
           return;
         } catch (e) {
-          container.innerHTML = `<div class="status-msg">Erro ao carregar o trabalho. <br><br><a href="index.html" class="post-link">Voltar ao Início</a></div>`;
+          container.innerHTML = `<div class="status-msg">Erro ao carregar o trabalho.<br><br><a href="index.html" class="post-link">Voltar ao Início</a></div>`;
           return;
         }
       }
 
-      // Modo Principal (Grelha de Publicações via GitHub API)
+      // Leitura da API do GitHub
       try {
         const pathParts = window.location.pathname.split('/').filter(Boolean);
         const owner = window.location.hostname.split('.')[0];
@@ -280,7 +451,7 @@
         const htmlFiles = files.filter(f => f.name.endsWith('.html') && f.name !== 'index.html');
 
         if (htmlFiles.length === 0) {
-          status.textContent = 'Ainda nenhum trabalho publicado em HTML.';
+          status.textContent = 'Ainda não foram encontrados trabalhos em HTML.';
           return;
         }
 
@@ -319,7 +490,7 @@
 
         if (Object.keys(categories).length === 0) {
           status.style.display = 'block';
-          status.textContent = 'Nenhum trabalho encontrado com o formato correto no <title> (Disciplina - Nome).';
+          status.textContent = 'Nenhum trabalho formatado com "Disciplina - Nome" no <title> foi encontrado.';
           return;
         }
 
@@ -357,7 +528,7 @@
         }
 
       } catch (err) {
-        status.textContent = 'Erro ao carregar os trabalhos do GitHub. Verifica a ligação.';
+        status.textContent = 'Erro ao carregar os trabalhos. Verifica a ligação ao GitHub.';
         console.error(err);
       }
     }
