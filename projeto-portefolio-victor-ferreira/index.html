@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Victor Ferreira</title>
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --accent: #38bdf8;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.5rem;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      color: var(--accent);
+      letter-spacing: 1px;
+    }
+
+    header p {
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+    }
+
+    #app {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .subject-category {
+      margin-bottom: 3rem;
+    }
+
+    .subject-title {
+      font-size: 1.8rem;
+      color: var(--accent);
+      border-left: 4px solid var(--accent);
+      padding-left: 0.75rem;
+      margin-bottom: 1.5rem;
+      text-transform: capitalize;
+    }
+
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .post-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .post-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .post-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background-color: #000;
+    }
+
+    .post-content {
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .post-content h1 {
+      font-size: 1.3rem;
+      margin-bottom: 0.75rem;
+      color: var(--text-main);
+    }
+
+    .post-content p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      flex-grow: 1;
+    }
+
+    .post-link {
+      display: inline-block;
+      margin-top: 1rem;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .post-link:hover {
+      text-decoration: underline;
+    }
+
+    .status-msg {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Victor Ferreira</h1>
+    <p>Portefólio de Trabalhos Escolares</p>
+  </header>
+
+  <main id="app">
+    <div id="status" class="status-msg">A carregar trabalhos...</div>
+  </main>
+
+  <script>
+    async function loadSchoolProjects() {
+      const app = document.getElementById('app');
+      const status = document.getElementById('status');
+
+      try {
+        const pathParts = window.location.pathname.split('/').filter(Boolean);
+        const owner = window.location.hostname.split('.')[0];
+        const repo = pathParts[0] || '';
+
+        if (!owner || !repo) {
+          status.textContent = 'Aguardando publicação no GitHub Pages...';
+          return;
+        }
+
+        const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents`);
+        if (!response.ok) throw new Error('Não foi possível aceder aos ficheiros do repositório.');
+
+        const files = await response.json();
+        const htmlFiles = files.filter(f => f.name.endsWith('.html') && f.name !== 'index.html');
+
+        if (htmlFiles.length === 0) {
+          status.textContent = 'Nenhum trabalho em HTML encontrado.';
+          return;
+        }
+
+        const categories = {};
+
+        for (const file of htmlFiles) {
+          const res = await fetch(file.download_url);
+          const htmlText = await res.text();
+
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(htmlText, 'text/html');
+
+          const titleText = doc.querySelector('title')?.textContent || '';
+          
+          if (titleText.includes('-')) {
+            const [subject, workName] = titleText.split('-').map(str => str.trim());
+
+            const h1 = doc.querySelector('h1')?.innerHTML || workName;
+            const imgSrc = doc.querySelector('img')?.getAttribute('src') || '';
+            const p = doc.querySelector('p')?.innerHTML || '';
+
+            if (!categories[subject]) {
+              categories[subject] = [];
+            }
+
+            categories[subject].push({
+              title: h1,
+              img: imgSrc,
+              description: p,
+              url: file.name
+            });
+          }
+        }
+
+        status.style.display = 'none';
+
+        if (Object.keys(categories).length === 0) {
+          status.style.display = 'block';
+          status.textContent = 'Nenhum trabalho formatado com "Disciplina - Nome" no <title> foi encontrado.';
+          return;
+        }
+
+        for (const [subject, posts] of Object.entries(categories)) {
+          const section = document.createElement('section');
+          section.className = 'subject-category';
+
+          const subjectHeader = document.createElement('h2');
+          subjectHeader.className = 'subject-title';
+          subjectHeader.textContent = subject;
+          section.appendChild(subjectHeader);
+
+          const grid = document.createElement('div');
+          grid.className = 'posts-grid';
+
+          posts.forEach(post => {
+            const card = document.createElement('article');
+            card.className = 'post-card';
+
+            const imgHtml = post.img ? `<img src="${post.img}" alt="${post.title}">` : '';
+
+            card.innerHTML = `
+              ${imgHtml}
+              <div class="post-content">
+                <h1>${post.title}</h1>
+                <p>${post.description}</p>
+                <a href="${post.url}" class="post-link">Ver trabalho completo &rarr;</a>
+              </div>
+            `;
+            grid.appendChild(card);
+          });
+
+          section.appendChild(grid);
+          app.appendChild(section);
+        }
+
+      } catch (err) {
+        status.textContent = 'Erro ao carregar os trabalhos. Verifica a ligação ou as permissões do repositório.';
+        console.error(err);
+      }
+    }
+
+    loadSchoolProjects();
+  </script>
+</body>
+</html>
